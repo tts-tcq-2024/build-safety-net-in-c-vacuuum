@@ -5,36 +5,62 @@
 #include <ctype.h>
 #include <string.h>
 
-char getSoundexCode(char c) {
+typedef struct
+{
+    char ch;
+    char value;
+} Lookup;
+
+char getSoundexCode(char c)
+{
+    Lookup lookupTable[] =
+    {
+        {'B', '1'}, {'F', '1'}, {'P', '1'}, {'V', '1'},
+        {'C', '2'}, {'G', '2'}, {'J', '2'}, {'K', '2'}, {'Q', '2'},
+        {'S', '2'}, {'X', '2'}, {'Z', '2'},
+        {'D', '3'}, {'T', '3'},
+        {'L', '4'},
+        {'M', '5'}, {'N', '5'},
+        {'R', '6'}
+    };
+
+    int tableSize = sizeof(lookupTable) / sizeof(lookupTable[0]);
+
     c = toupper(c);
-    switch (c) {
-        case 'B': case 'F': case 'P': case 'V': return '1';
-        case 'C': case 'G': case 'J': case 'K': case 'Q': case 'S': case 'X': case 'Z': return '2';
-        case 'D': case 'T': return '3';
-        case 'L': return '4';
-        case 'M': case 'N': return '5';
-        case 'R': return '6';
-        default: return '0'; // For A, E, I, O, U, H, W, Y
+
+    for (int i = 0; i < tableSize; i++)
+    {
+        if (lookupTable[i].ch == c)
+        {
+            return lookupTable[i].value;
+        }
     }
+
+    return '0';
 }
 
-void generateSoundex(const char *name, char *soundex) {
+char* generateSoundex(const char *name,char *soundex)
+{
     int len = strlen(name);
     soundex[0] = toupper(name[0]);
     int sIndex = 1;
 
-    for (int i = 1; i < len && sIndex < 4; i++) {
+    for (int i = 1; i < len && sIndex < 4; i++)
+    {
         char code = getSoundexCode(name[i]);
-        if (code != '0' && code != soundex[sIndex - 1]) {
+        if (code != '0' && code != soundex[sIndex - 1])
+        {
             soundex[sIndex++] = code;
         }
     }
 
-    while (sIndex < 4) {
+    while (sIndex < 4)
+    {
         soundex[sIndex++] = '0';
     }
 
     soundex[4] = '\0';
+    return soundex;
 }
 
 #endif // SOUNDEX_H
