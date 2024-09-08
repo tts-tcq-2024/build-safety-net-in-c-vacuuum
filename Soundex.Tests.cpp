@@ -1,9 +1,14 @@
 #include <gtest/gtest.h>
 #include "Soundex.h"
 
-TEST(SoudexTestsuite, ReplacesConsonantsWithAppropriateDigits) {
- //AAA
-  char soundex[5];
-  generateSoundex("AX", soundex);
- // ASSERT_EQ(soundex,"A200");
+TEST(SoundexTestsuite, ReplacesConsonantsWithAppropriateDigits_1)
+{
+    //tests for zero padding and soundex for 'X' [CASE 2]
+    char soundex[5];
+    const char *answer = "A200";
+    generateSoundex("AX", soundex);
+    for(int i =0; i<5;i++)
+    {
+        ASSERT_EQ(answer[i],soundex[i]);
+    }
 }
