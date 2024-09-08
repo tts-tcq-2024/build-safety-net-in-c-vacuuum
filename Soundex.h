@@ -39,6 +39,23 @@ char getSoundexCode(char c)
     return '0';
 }
 
+int SoundexCheck(char code, char prevCode)
+{
+    if(code != '0' && code != prevCode)
+        return 1;
+    else
+        return 0;
+}
+
+int CheckIterationSize(int i,int len,int sIndex)
+{
+    if (i < len && sIndex < 4)
+    return 1;
+    else
+    return 0;
+
+}
+
 char* generateSoundex(const char *name, char *soundex) 
 {
     int len = strlen(name);
@@ -47,10 +64,11 @@ char* generateSoundex(const char *name, char *soundex)
 
     char prevCode = '0';
 
-    for (int i = 1; i < len && sIndex < 4; i++) {
+    for (int i = 1; CheckIterationSize(i,len,sIndex); i++) {
         char code = getSoundexCode(name[i]);
 
-        if (code != '0' && code != prevCode) {
+        if (SoundexCheck(code,prevCode))
+        {
             soundex[sIndex++] = code;
             prevCode = code;
         }
