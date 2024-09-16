@@ -121,7 +121,7 @@ Christopher	C623
 
 Case 8: No Input
 ------------------
-TestCaseName:
+TestCaseName: ReturnEmptyStringforNoInput
 Scenario: An empty string should result in an empty Soundex output.
 Desired Output:* The result should be an empty string.
 Steps:
