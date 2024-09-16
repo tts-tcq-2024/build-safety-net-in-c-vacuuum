@@ -1,0 +1,165 @@
+Soundex algorithm
+##################
+
+Public Interface: generateSoundex
+==================================
+
+**Case 1: Single Letter Input**
+-------------------------------
+*TestCaseName:* ReplacesSingleCharacterInputWithitsUpperCaseLetterandZeroPadding
+*Scenario:* Single letter input should return the letter followed by three zeros.
+*Desired Output:* The result should contain the letter in uppercase followed by 3 zeros.
+*Steps:*
+Given: A single letter (e.g., A, B, a, b).
+When: The Soundex algorithm is applied.
+Then: The result should be the uppercase version of the letter followed by "000".
+
+Examples:
+Input	Output
+F	    F000
+a	    A000
+f	    F000
+
+
+**Case 2: Two Same Consonant Letters**
+--------------------------------------
+*Test Case Name:* ForSameConsonantsRetainFirstLetterandEncodeOnce
+*Scenario:* When input contains two same consonant letters, only the first one should be encoded.
+*Desired Output:* The result should encode only the first letter's Soundex code, followed by zeros.
+*Steps:*
+Given: Two same consonants in a row (e.g., BB, CC, GG).
+When: The Soundex algorithm is applied.
+Then: Only the first letter's Soundex code should be considered.
+
+Examples:
+Input	Output
+BB	    B100
+CC	    C200
+GG	    G200
+
+
+**Case 3: Input with Both Uppercase and Lowercase**
+---------------------------------------------------
+*Test Case Name:* MixedLettersRetainFistLetterinUpperCaseandRestisCaseInsensitive
+*Scenario:* Input contains mixed case letters and should be case insensitive.
+*Desired Output:* The result should be case insensitive, and the first letter should be in uppercase.
+*Steps:
+Given: Mixed case input (e.g., AbCd).
+When: The Soundex algorithm is applied.
+Then: The Soundex output should treat lowercase and uppercase equally, and the first letter should be capitalized.
+
+Examples:
+Input	Output
+AbCd	A123
+aBcD	A123
+
+
+**Case 4: Vowel-only Input**
+-----------------------------
+*TestCaseName:* VowelsOnlyInputRetainsFirstLetterFollowedbyZeroPadding
+*Scenario:* Vowel-only input should result in the first vowel followed by three zeros.
+*Desired Output:* The result should contain the first letter (vowel) in uppercase followed by 3 zeros.
+*Steps:
+Given: An input of all vowels (e.g., AEIOU, aeiou).
+When: The Soundex algorithm is applied.
+Then: The result should be the first vowel in uppercase followed by three zeros.
+
+Examples:
+Input	Output
+AEIOU	A000
+aeiou	A000
+
+
+**Case 5: Input Containing Letters with Same Soundex Code**
+------------------------------------------------------------
+*TestCaseName:* OnlyFirstOccurenceofLetterofSameSoundexCodetobeEncoded
+*Scenario:* Letters with the same Soundex code should not be repeated in the result.
+*Desired Output:* Only the first occurrence of the letter or letters with the same Soundex code should be encoded.
+*Steps:
+Given: Letters that map to the same Soundex code in the lookup table (e.g., BP, CK, DT).
+When: The Soundex algorithm is applied.
+Then: The letters should not be repeated in the result.
+
+Examples:
+Input	Output
+BP	    B100
+CK	    C200
+DT	    D300
+
+
+**Case 6: Input with Mixed Vowels and Consonants**
+---------------------------------------------------
+*TestCaseName:* EncodeConsonantsandIgnoreVowelsExceptIfFirstLetter
+*Scenario:* Consonants should be encoded, and vowels should be ignored after the first letter.
+*Desired Output:* The consonants should be encoded according to the lookup table, and vowels should be ignored after the first letter.
+*Steps:
+Given: Mixed vowels and consonants (e.g., Abe, Eagle).
+When: The Soundex algorithm is applied.
+Then: Only consonants are encoded, ignoring vowels after the first letter.
+
+Examples:
+Input	Output
+Abe	    A100
+Eagle	E240
+
+
+**Case 7: Long input**
+-----------------------
+*TestCaseName:* ForLongInputEncodeOnlyFirstFourLetters
+*Scenario:* Input longer than 4 characters should only return the first 4 Soundex codes.
+*Desired Output:* Only the first 4 characters should be included in the output, ignoring the rest.
+*Steps:
+Given: A string longer than 4 characters (e.g., Alexander).
+When: The Soundex algorithm is applied.
+Then: Only the first 4 characters should be returned, the rest should be ignored.
+
+Examples:
+Input	Output
+Alexander	A425
+Christopher	C623
+
+
+**Case 8: No Input**
+---------------------
+*TestCaseName:*
+*Scenario:* An empty string should result in an empty Soundex output.
+*Desired Output:* The result should be an empty string.
+*Steps:
+Given: An empty string ("").
+When: The Soundex algorithm is applied.
+Then: The result should be an empty string.
+Examples:
+Input	Output
+""	    ""
+
+
+**Case 9: Input Containing Non-Alphabetic Characters**
+-------------------------------------------------------
+*TestCaseName:* InputWithNonAlphabeticCharactersShouldbeIgnoredandEncodeOnlyValidSoundexCharacters
+*Scenario:* Input with non-alphabetic characters should return only valid Soundex characters.
+*Desired Output:* Non-alphabetic characters should be ignored, and only valid Soundex-encoded letters should be returned.
+*Steps:
+Given: Input containing numbers, symbols, or whitespace (e.g., A1B@C).
+When: The Soundex algorithm is applied.
+Then: Only the alphabetic characters should be used in the result, ignoring others.
+
+Examples:
+Input	Output
+A1B@C	A120
+H#E!L2O	H400
+
+
+**Case 10: Input with Repeating Characters**
+---------------------------------------------
+*TestCaseName:* ConsecutiveCharactersWithSameSoundextobeEncodedOnce
+*Scenario:* Consecutive characters that map to the same Soundex code should be treated as one.
+*Desired Output:* Repeated characters with the same Soundex code should be encoded only once.
+*Steps:
+Given: An input where the same consonant repeats or letters with the same Soundex code repeat (e.g., BFPV, CCGG).
+When: The Soundex algorithm is applied.
+Then: The result should contain only one occurrence of the repeated characters' code.
+
+Examples:
+Input	Output
+BFPV	B100
+CCGG	C200
