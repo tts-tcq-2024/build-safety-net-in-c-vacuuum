@@ -8,16 +8,16 @@ typedef struct
 {
     char character;
     char value;
-} SoundexLookup;
+} soundexLookup;
 
 // Function to search in the lookup table and return the corresponding Soundex value
-char searchSoundexLookupTable(SoundexLookup *lookupTable, int tableSize, char letter)
+char searchSoundexLookupTable(soundexLookup *lookupTable, int tableSize, char letter)
 {
-    for (int i = 0; i < tableSize; i++)
+    for (int index = 0; index < tableSize; index++)
     {
-        if (lookupTable[i].character == letter)
+        if (lookupTable[index].character == letter)
         {
-            return lookupTable[i].value;
+            return lookupTable[index].value;
         }
     }
     return '0';  // Return '0' if the character is not found in the lookup table
@@ -27,7 +27,7 @@ char searchSoundexLookupTable(SoundexLookup *lookupTable, int tableSize, char le
 char getSoundexCode(char letter)
 {
     letter = toupper(letter);  // Convert the character to uppercase
-    SoundexLookup lookupTable[18] =
+    soundexLookup lookupTable[18] =
     {
         {'B','1'}, {'F', '1'}, {'P','1'}, {'V','1'},
         {'C','2'}, {'G','2'}, {'J','2'}, {'K','2'}, {'Q','2'},
@@ -48,32 +48,30 @@ int addSoundexCodetoResult(char code, char previousCode)
 }
 
 // Function to check the iteration size for the loop in `generateSoundex`
-int CheckIterationSize(int i, int length, int sIndex)
+int checkIterationSize(int index, int length, int soundexIndex)
 {
-    return (i < length && sIndex < 4);
+    return (index < length && soundexIndex < 4);
 }
 
 char* generateSoundex(const char *name, char *soundex) 
 {
     int length = strlen(name);
     soundex[0] = toupper(name[0]);
-    int sIndex = 1;
+    int soundexIndex = 1;
     char previousCode = '0';
-    for (int i = 1; CheckIterationSize(i, length, sIndex); i++) 
+    for (int index = 1; checkIterationSize(index, length, soundexIndex); index++) 
     {
-        char code = getSoundexCode(name[i]);
+        char code = getSoundexCode(name[index]);
         // If the Soundex code is valid and not the same as the previous code, add it to result
         if (addSoundexCodetoResult(code, previousCode))
         {
-            soundex[sIndex++] = code;
+            soundex[soundexIndex++] = code;
             previousCode = code;  // Update the previous code
         }
     }
-
     // Fill the remaining places with '0'
-    memset(soundex + sIndex, '0', 4 - sIndex);
+    memset(soundex + soundexIndex, '0', 4 - soundexIndex);
     soundex[4] = '\0';  // Ensure the Soundex code is null-terminated
-    
     return soundex;
 }
 
