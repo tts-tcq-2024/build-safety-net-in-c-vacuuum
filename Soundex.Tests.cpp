@@ -85,8 +85,10 @@ TEST(SoundexTestsuite, EncodeConsonantsandIgnoreVowelsExceptIfFirstLetter)
     char soundex[5];
     const char *answer1 = "A100";
     const char *answer2 = "E240";
+    const char *answer3 = "Y000";
     ASSERT_STREQ(answer1,generateSoundex("Abe", soundex));
     ASSERT_STREQ(answer2,generateSoundex("Eagle", soundex));
+    ASSERT_STREQ(answer3,generateSoundex("YYY", soundex));
 
 }
 
@@ -107,8 +109,8 @@ TEST(SoundexTestsuite, ForLongInputEncodeOnlyFirstFourLetters)
 
 /*
 TEST CASE 08
-*Scenario:* Input with non-alphabetic characters should return only valid Soundex characters.
-*Desired Output:* Non-alphabetic characters should be ignored, and only valid Soundex-encoded letters should be returned.
+- *Scenario:* An empty string should result in an empty Soundex output.
+- *Desired Output:* The result should be an empty string.
 */
 TEST(SoundexTestsuite, ReturnEmptyStringforNoInput)
 {
@@ -136,11 +138,37 @@ TEST CASE 10
 *Scenario:* Consecutive characters that map to the same Soundex code should be treated as one.
 *Desired Output:* Repeated characters with the same Soundex code should be encoded only once.
 */
-TEST(SoundexTestsuite, ConsecutiveCharactersWithSameSoundextobeEncodedOnce)
+TEST(SoundexTestsuite, ConsecutiveCharactersWithSameSoundexCodetobeEncodedOnce)
 {
     char soundex[5];
     const char *answer1 = "B100";
     const char *answer2 = "C200";
     ASSERT_STREQ(answer1,generateSoundex("BFPV", soundex));
     ASSERT_STREQ(answer2,generateSoundex("ccgg", soundex));
+}
+
+/*
+TEST CASE 11
+*Scenario:* Consecutive characters between vowels that map to the same Soundex code should be encoded twice.
+*Desired Output:* Repeated characters with the same Soundex code should be encoded only once.
+*/
+TEST(SoundexTestsuite, ConsecutiveCharactersWithSameSoundexSeparatedByVoweltobeEncodedTwice)
+{
+    char soundex[5];
+    const char *answer1 = "J250";
+    ASSERT_STREQ(answer1,generateSoundex("JKASON", soundex));
+}
+
+/*
+TEST CASE 12
+*Scenario:* Consecutive characters between 'H','h' or 'W','w' that map to the same Soundex code should be treated as one.
+*Desired Output:* Repeated characters with the same Soundex code should be encoded only once.
+*/
+TEST(SoundexTestsuite, ConsecutiveCharactersWithSameSoundextobeEncodedOnce)
+{
+    char soundex[5];
+    const char *answer1 = "M500";
+    const char *answer2 = "M500";
+    ASSERT_STREQ(answer1,generateSoundex("MHn", soundex));
+    ASSERT_STREQ(answer2,generateSoundex("mWN", soundex));
 }
